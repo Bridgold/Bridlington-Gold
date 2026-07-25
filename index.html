@@ -10,10 +10,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#ffffff">
     
-    <!-- REQUIRED CORES: JQUERY AND RADIO.CO PLUGIN LAYOUT DRIVERS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://public.radio.co/playerapi/jquery.radiocoplayer.min.js"></script>
-    
     <style>
         :root {
             --bg-color: #ffffff;
@@ -56,6 +52,7 @@
             text-align: center;
             /* Custom blue framing boundary outline ring */
             border: 2px solid var(--accent-color);
+            position: relative;
         }
 
         /* HEADER LOGO POSITIONING: Locked at the absolute top of the player card */
@@ -152,10 +149,16 @@
             object-fit: contain;
         }
 
-        /* Keeps the background fallback elements cleanly tucked away */
-        .radioco-player-hidden {
-            display: none !important;
-            visibility: hidden !important;
+        /* HIDDEN WIDGET CONTAINER: Keeps OnlineRadioBox completely invisible behind your design */
+        .hidden-widget-box {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            overflow: hidden;
+            pointer-events: none;
+            bottom: 0;
+            left: 0;
         }
     </style>
 </head>
@@ -169,23 +172,9 @@
 
         <!-- Station Typography Metadata -->
         <div class="station-name">Bridlington Gold</div>
-        
-        <!-- Live tracking track fields automatically updated by the backend core -->
-        <div class="now-playing"><span class="radioco-nowplaying">Live Stream</span></div>
+        <div class="now-playing" id="trackInfo">Live Stream</div>
 
-        <!-- EXTENDED DATA PASS ENGINE: INJECTING SECURITY HOOK VALUES FOR THE JQUERY WRAPPER -->
-        <div class="radioplayer radioco-player-hidden" 
-             data-src="https://radio.co" 
-             data-autoplay="false" 
-             data-playbutton="false" 
-             data-volumeslider="false" 
-             data-elapsedtime="false" 
-             data-nowplaying="true" 
-             data-showplayer="false" 
-             data-volume="100">
-        </div>
-
-        <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
+        <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE) -->
         <div class="controls">
             <button class="btn-play" id="customPlayBtn" aria-label="Play">
                 <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -196,44 +185,51 @@
         <div class="station-art-footer">
             <img src="assets/BGR-Logo.png" alt="Bridlington Gold Widget Logo">
         </div>
+
+        <!-- HIDDEN PIPELINE ENGINE LAYER: RUNS YOUR APPROVED WEBSITE WIDGET IN THE BACKGROUND -->
+        <div class="hidden-widget-box">
+            <div class="orbP" id="orb_player_26bbf4ab2ff58dc4" vlm="0.8">
+                <audio id="orb_player_26bbf4ab2ff58dc4_p" crossorigin="true"></audio>
+                <button class="orbPp" id="hiddenRealBtn" country="uk" alias="bridlingtongold" stream="1" autoplay="autoplay"></button>
+            </div>
+        </div>
     </div>
 
+    <!-- Active Script Initialization Engines -->
     <script>
-        // Activate the background Radio.co jQuery script wrapper engine instantly
-        $('.radioplayer').radiocoPlayer();
+        // OnlineRadioBox Background Initialization Pipeline
+        var orbp_w = orbp_w || { lang: "en-us" };
+        orbp_w.cmd = orbp_w.cmd || [];
+        orbp_w.apiUrl = "https://onlineradiobox.com";
+        orbp_w.cmd.push(function() {
+            orbp_w.init("orb_player_26bbf4ab2ff58dc4");
+        });
+        
+        var s = document.createElement('script');
+        s.src = "https://onlineradiobox.com";
+        document.body.appendChild(s);
 
+        // REMOTE CONTROL BRIDGE: Maps your beautiful blue play button to click the unblockable button
         const playBtn = document.getElementById('customPlayBtn');
         const playIcon = document.getElementById('playIcon');
+        const hiddenRealBtn = document.getElementById('hiddenRealBtn');
 
         const playPath = "M8 5v14l11-7z";
         const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
-
-        // Native streaming variable backup fallback to completely enforce hardware sound execution
-        let audioHardwarePipeline = null;
+        let isPlaying = false;
 
         playBtn.addEventListener('click', () => {
-            if (!audioHardwarePipeline) {
-                // Pointing to your direct stream mount proxy
-                audioHardwarePipeline = new Audio("https://radio.co");
-                audioHardwarePipeline.crossOrigin = "anonymous";
-            }
-
-            if (audioHardwarePipeline.paused) {
-                // Clear the cache buffer to deliver a 100% real-time on-air audio feed point
-                audioHardwarePipeline.load();
-                
-                audioHardwarePipeline.play()
-                    .then(() => {
-                        playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                        playIcon.style.marginLeft = "0px"; // Centers pause parallel lines perfectly
-                    })
-                    .catch(err => {
-                        console.error("Audio engine sound initialization blocked:", err);
-                    });
+            // Remotely click the whitelisted background button engine
+            hiddenRealBtn.click();
+            
+            if (!isPlaying) {
+                playIcon.innerHTML = `<path d="${pausePath}"/>`;
+                playIcon.style.marginLeft = "0px"; // Centers pause parallel lines perfectly
+                isPlaying = true;
             } else {
-                audioHardwarePipeline.pause();
                 playIcon.innerHTML = `<path d="${playPath}"/>`;
                 playIcon.style.marginLeft = "4px"; // Centers play triangle visually
+                isPlaying = false;
             }
         });
 
