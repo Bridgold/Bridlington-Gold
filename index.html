@@ -257,14 +257,7 @@
         link.href = './manifest.json';
         document.head.appendChild(link);
 
-        // Active Service Worker Engine
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                    .then(reg => console.log('Service Worker Active:', reg.scope))
-                    .catch(err => console.error('Service Worker Error:', err));
-            });
-        }
+        
     </script>
 </body>
 </html>
