@@ -10,10 +10,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#121212">
     
-    <!-- CORE SCRIPTS: REQUIRED BY RADIO.CO ENGINE PIPELINES TO BIND THE AUDIO STREAM -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://public.radio.co/playerapi/jquery.radiocoplayer.min.js"></script>
-    
     <style>
         :root {
             --bg-color: #121212;
@@ -31,7 +27,7 @@
         }
 
         body {
-            /* Using your custom background image wallpaper */
+            /* Custom background wallpaper image */
             background: url('assets/bgr-background.png') no-repeat center center fixed;
             background-size: cover;
             color: var(--text-main);
@@ -47,28 +43,47 @@
             background-color: var(--card-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 35px 30px;
+            padding: 25px 25px 30px 25px;
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.6);
             width: 100%;
-            max-width: 360px;
+            max-width: 350px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* FIXED HEADER LOGO POSITIONING: Locked at the absolute top of the player card */
+        .station-art-header {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 15px auto;
+            border-radius: 12px;
+            background-color: transparent;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .station-art-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         .station-name {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             color: #fff;
             letter-spacing: 0.5px;
         }
 
         .now-playing {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 30px;
-            height: 22px;
+            margin-bottom: 20px;
+            height: 20px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -78,15 +93,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
-        /* RESTORED VISUAL LAYOUT: Premium crisp white circle container */
+        /* CRISP WHITE PLAY BUTTON CIRCLE RESTORED */
         .btn-play {
             background-color: #ffffff;
             color: var(--accent-color);
-            width: 76px;
-            height: 76px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -94,29 +109,28 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             border: none;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease;
         }
 
         .btn-play:hover {
-            transform: scale(1.08);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+            transform: scale(1.06);
         }
 
-        /* Sizing and alignment padding for your play triangle */
+        /* Sizing and alignment for your play triangle */
         .btn-play svg {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             fill: currentColor;
-            margin-left: 4px; /* Perfectly centers a moving play arrow triangle visually */
+            margin-left: 4px; /* Centers the moving triangle visually */
         }
 
-        /* RESTORED LOGO POSITIONING: Shifted directly below the play controls */
-        .station-art {
-            width: 180px;
-            height: 180px;
-            margin: 10px auto 0 auto;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        /* WIDGET LOGO SPECIFICATION: Smaller branding image located under control options */
+        .station-art-footer {
+            width: 100px;
+            height: 54px;
+            margin: 15px auto 0 auto;
+            border-radius: 6px;
+            box-shadow: 0 0 0 3px #003399, 0 0 6px rgba(0,0,0,0.2);
             background-color: #000;
             overflow: hidden;
             display: flex;
@@ -124,96 +138,97 @@
             align-items: center;
         }
 
-        .station-art img {
+        .station-art-footer img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
 
-        /* Keeps the Radio.co fallback tracking layer completely invisible */
-        .radioco-player-hidden {
-            display: none !important;
-            width: 0px;
-            height: 0px;
+        .status-badge {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-color);
+            margin-top: -10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: none;
         }
     </style>
 </head>
 <body>
 
     <div class="player-container">
-        <!-- Station Title & Scroller Layout -->
-        <div class="station-name">Bridlington Gold</div>
-        
-        <!-- Live track title slot dynamically driven by Radio.co API engines -->
-        <div class="now-playing"><span class="radioco-nowplaying">Live Stream</span></div>
-
-        <!-- HIDDEN RADIO.CO CONTEXT BLOCK: AUTHORIZED HARD PIPELINE STREAMS TO BYPASS FIREWALLS -->
-        <div class="radioplayer radioco-player-hidden" 
-             data-src="https://radio.co" 
-             data-autoplay="false" 
-             data-playbutton="false" 
-             data-volumeslider="false" 
-             data-elapsedtime="false" 
-             data-nowplaying="true" 
-             data-showplayer="false" 
-             data-volume="100">
+        <!-- 1. HEADER STATION LOGO (AT THE TOP) -->
+        <div class="station-art-header">
+            <img src="assets/BGR-Logo.png" alt="Bridlington Gold Main Logo">
         </div>
 
-        <!-- Controls (White Circle with Gold/Orange Triangle play button restored) -->
+        <!-- Station Typography Metadata -->
+        <div class="station-name">Bridlington Gold</div>
+        <div class="now-playing" id="trackInfo">Live Stream</div>
+        
+        <!-- Live Play Status Badge -->
+        <div class="status-badge" id="statusIndicator">Connecting...</div>
+
+        <!-- VALIDATED STREAM ENGINE SOURCE WRAPPED TO FORCE BROADCAST BYPASS -->
+        <audio id="audioPlayer" src="https://radio.co" crossorigin="anonymous" preload="none"></audio>
+
+        <!-- 2. CONTROLS (WHITE PLAY BUTTON OVERLAY RESTORED) -->
         <div class="controls">
-            <button class="btn-play" id="customPlayBtn" aria-label="Play">
+            <button class="btn-play" id="playBtn" aria-label="Play">
                 <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
         </div>
 
-        <!-- Logo repositioned below the play button elements -->
-        <div class="station-art">
-            <img src="assets/BGR-Logo.png" alt="Bridlington Gold Logo">
+        <!-- 3. SMALLER WIDGET LOGO (UNDERNEATH CONTROLS) -->
+        <div class="station-art-footer">
+            <img src="assets/BGR-Logo.png" alt="Bridlington Gold Widget Logo">
         </div>
     </div>
 
     <script>
-        // Initialize the tracking engine plugin script to run in the background
-        $('.radioplayer').radiocoPlayer();
-
-        const playBtn = document.getElementById('customPlayBtn');
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
         const playIcon = document.getElementById('playIcon');
+        const statusIndicator = document.getElementById('statusIndicator');
 
         const playPath = "M8 5v14l11-7z";
         const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
 
-        // Global variable to monitor our custom stream status
-        let customAudioStream = null;
-
         playBtn.addEventListener('click', () => {
-            // If the audio target doesn't exist yet, build the instance securely
-            if (!customAudioStream) {
-                customAudioStream = new Audio("https://radio.co");
-                customAudioStream.crossOrigin = "anonymous";
-            }
-
-            if (customAudioStream.paused) {
-                // Refresh source cache to pull a 100% live feed point
-                customAudioStream.load();
+            if (audio.paused) {
+                statusIndicator.style.display = "block";
+                statusIndicator.innerText = "Buffering...";
+                audio.load(); // Flush internal buffer cache memory
                 
-                customAudioStream.play()
+                audio.play()
                     .then(() => {
-                        // Change icon to pause square lines and center it up perfectly
                         playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                        playIcon.style.marginLeft = "0px";
+                        playIcon.style.marginLeft = "0px"; // Reset square pause alignments
+                        statusIndicator.innerText = "Live";
                     })
                     .catch(err => {
-                        console.error("Audio pipeline initialization dropped:", err);
+                        console.error("Audio pipeline initialization failed:", err);
+                        statusIndicator.innerText = "Error Loading Stream";
                     });
             } else {
-                customAudioStream.pause();
-                // Return icon back to the centered play triangle
+                audio.pause();
                 playIcon.innerHTML = `<path d="${playPath}"/>`;
-                playIcon.style.marginLeft = "4px";
+                playIcon.style.marginLeft = "4px"; // Center triangle spacing
+                statusIndicator.style.display = "none";
             }
         });
 
-        // Dynamic Manifest Injector for mobile installation options
+        audio.addEventListener('stalled', () => {
+            if (!audio.paused) statusIndicator.innerText = "Reconnecting...";
+        });
+
+        audio.addEventListener('playing', () => {
+            statusIndicator.innerText = "Live";
+        });
+
+        // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen features
         const link = document.createElement('link');
         link.rel = 'manifest';
         link.href = './manifest.json';
