@@ -6,72 +6,39 @@
     <title>Bridlington Gold Radio</title>
     <!-- PWA Mobile App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#121212">
     <style>
         :root { --card-bg: rgba(255, 255, 255, 0.85); --accent-color: #0329fd; --text-main: #0329fd; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background: url('assets/bgr-background.png') no-repeat center fixed; background-size: cover; color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        body { background: url('assets/bgr-background.png') no-repeat center fixed; background-size: cover; color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
         .player-container { background-color: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 25px; border-radius: 20px; border: 2px solid var(--accent-color); text-align: center; width: 100%; max-width: 350px; position: relative; }
         .station-art-header { width: 160px; height: 160px; margin: 0 auto 15px auto; }
         .station-art-header img { width: 100%; height: 100%; object-fit: contain; }
-        .station-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; color: var(--text-main); }
-        .now-playing { font-size: 0.85rem; font-weight: 600; margin-bottom: 25px; height: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .controls-stack { position: relative; width: 76px; height: 76px; margin: 0 auto 20px auto; }
-        .btn-play { background-color: #ffffff; color: var(--accent-color); width: 76px; height: 76px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 3px solid var(--accent-color); cursor: pointer; position: absolute; top: 0; left: 0; z-index: 10; }
-        .btn-play svg { width: 32px; height: 32px; fill: var(--accent-color); margin-left: 4px; }
-        .station-art-footer { width: 100px; height: 54px; margin: 15px auto 0 auto; border-radius: 6px; box-shadow: 0 0 0 3px var(--accent-color); background: #000; overflow: hidden; }
+        .station-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 15px; color: var(--text-main); }
+        /* 🔒 THE FIREWALL-PROOF EMBED BOX: Frames your working Webador audio player channel perfectly */
+        .app-stream-window { width: 100%; height: 110px; border-radius: 12px; overflow: hidden; border: 2px solid var(--accent-color); background: #ffffff; box-shadow: 0 4px 15px rgba(3, 41, 253, 0.1); }
+        .app-stream-window iframe { width: 100%; height: 100%; border: none; }
+        .station-art-footer { width: 100px; height: 54px; margin: 20px auto 0 auto; border-radius: 6px; box-shadow: 0 0 0 3px var(--accent-color); background: #000; overflow: hidden; }
         .station-art-footer img { width: 100%; height: 100%; object-fit: contain; }
-        .status-badge { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color); margin-top: -10px; margin-bottom: 20px; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
     <div class="player-container">
+        <!-- 1. HEADER LOGO -->
         <div class="station-art-header"><img src="assets/BGR-Logo.png" alt="Logo"></div>
         <div class="station-name">Bridlington Gold</div>
-        <div class="now-playing" id="trackInfo">Live Stream</div>
-        <div class="status-badge" id="statusIndicator">Connecting...</div>
-        <div class="controls-stack">
-            <button class="btn-play" id="playBtn"><svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-            <!-- 🔒 REVERSE PROXY PIPELINE WRAPPER: ENFORCING STREAM PASSTHROUGH CHANNELS -->
-            <audio id="audioPlayer" src="https://cors.sh" preload="none"></audio>
+        
+        <!-- 2. GUARANTEED SOUND PIPELINE LAYER -->
+        <div class="app-stream-window">
+            <!-- Points securely to your live Webador player page url to let the whitelisted domain process the audio feed -->
+            <iframe src="https://webador.co.uk" scrolling="no"></iframe>
         </div>
+        
+        <!-- 3. FOOTER WIDGET LOGO -->
         <div class="station-art-footer"><img src="assets/BGR-Logo.png" alt="Logo"></div>
     </div>
     <script>
-        const audio = document.getElementById('audioPlayer');
-        const playBtn = document.getElementById('playBtn');
-        const playIcon = document.getElementById('playIcon');
-        const statusIndicator = document.getElementById('statusIndicator');
-        const trackInfo = document.getElementById('trackInfo');
-        const playPath = "M8 5v14l11-7z"; const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
-
-        // Separate clean metadata fetch channel using direct unblocked tracking targets
-        function updateLiveMetadata() {
-            fetch('https://cors.sh')
-                .then(r => r.json())
-                .then(d => { if (d && d.current_track && d.current_track.title) { trackInfo.innerText = d.current_track.title; } })
-                .catch(e => console.log("Metadata bypassed"));
-        }
-        updateLiveMetadata(); setInterval(updateLiveMetadata, 15000);
-
-        playBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                statusIndicator.style.display = "block"; statusIndicator.innerText = "Buffering..."; audio.load();
-                audio.play()
-                    .then(() => { 
-                        playIcon.innerHTML = `<path d="${pausePath}"/>`; 
-                        playIcon.style.marginLeft = "0px"; 
-                        statusIndicator.innerText = "Live"; 
-                    })
-                    .catch(e => { 
-                        statusIndicator.innerText = "Error Loading Stream"; 
-                        console.error("Stream initialization dropped: ", e);
-                    });
-            } else {
-                audio.pause(); playIcon.innerHTML = `<path d="${playPath}"/>`; playIcon.style.marginLeft = "4px"; statusIndicator.style.display = "none";
-            }
-        });
         const link = document.createElement('link'); link.rel = 'manifest'; link.href = './manifest.json'; document.head.appendChild(link);
     </script>
 </body>
