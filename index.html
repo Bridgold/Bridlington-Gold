@@ -10,6 +10,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#ffffff">
     
+    <!-- CRITICAL DEPENDENCY: OFFICIAL RADIO.CO UNBLOCKABLE PLAYER ENGINE SCRIPTS -->
+    <script src="https://radio.co"></script>
+    
     <style>
         :root {
             --bg-color: #ffffff;
@@ -162,7 +165,17 @@
 </head>
 <body>
 
-    <div class="player-container">
+    <!-- BINDING PLAYER ELEMENT ATTRIBUTES AS TARGETS ACCORDING TO OFFICIAL DEVELOPER DOCUMENTATION FOR OVERRIDES -->
+    <div class="player-container radioplayer" 
+         data-src="https://radio.co" 
+         data-autoplay="false" 
+         data-playbutton="false" 
+         data-volumeslider="false" 
+         data-elapsedtime="false" 
+         data-nowplaying="true" 
+         data-showplayer="false" 
+         data-volume="100">
+
         <!-- 1. HEADER STATION LOGO (AT THE TOP) -->
         <div class="station-art-header">
             <img src="assets/BGR-Logo.png" alt="Bridlington Gold Main Logo">
@@ -170,14 +183,17 @@
 
         <!-- Station Typography Metadata -->
         <div class="station-name">Bridlington Gold</div>
-        <div class="now-playing" id="trackInfo">Live Stream</div>
+        
+        <!-- Stream content field tracks directly via specific API wrapper mapping requirements -->
+        <div class="now-playing"><span class="radioco-nowplaying">Live Stream</span></div>
         
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
 
-        <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
+        <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE) -->
+        <!-- Appending corporate engine tracker token handles audio playback without error blocks -->
         <div class="controls">
-            <button class="btn-play" id="playBtn" aria-label="Play">
+            <button class="btn-play radioco-playButton" id="playBtn" aria-label="Play">
                 <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
         </div>
@@ -196,34 +212,25 @@
         const playPath = "M8 5v14l11-7z";
         const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
 
-        // Create a direct native browser audio object instance using your unblockable Radio.co stream proxy endpoint
-        let radioAudioStream = new Audio("https://radio.co");
-        radioAudioStream.crossOrigin = "anonymous";
+        // Initialize tracking class elements instantly using developer API specifications
+        const customEngineSetup = new RadioCoPlayer('.radioplayer');
 
         playBtn.addEventListener('click', () => {
-            if (radioAudioStream.paused) {
-                statusIndicator.style.display = "block";
-                statusIndicator.innerText = "Buffering...";
+            // Tiny buffer check allows background system execution validation parameters to clear smoothly
+            setTimeout(() => {
+                const streamIsActive = playBtn.classList.contains('radioco-playing');
                 
-                // Force reload the target path parameter to clear lag buffer layers
-                radioAudioStream.load();
-                
-                radioAudioStream.play()
-                    .then(() => {
-                        playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                        playIcon.style.marginLeft = "0px"; // Centers pause parallel lines perfectly
-                        statusIndicator.innerText = "Live";
-                    })
-                    .catch(err => {
-                        console.error("Audio core pipeline failed to engage:", err);
-                        statusIndicator.innerText = "Error Loading Stream";
-                    });
-            } else {
-                radioAudioStream.pause();
-                playIcon.innerHTML = `<path d="${playPath}"/>`;
-                playIcon.style.marginLeft = "4px"; // Centers play triangle visually
-                statusIndicator.style.display = "none";
-            }
+                if (streamIsActive) {
+                    playIcon.innerHTML = `<path d="${pausePath}"/>`;
+                    playIcon.style.marginLeft = "0px";
+                    statusIndicator.style.display = "block";
+                    statusIndicator.innerText = "Live On Air";
+                } else {
+                    playIcon.innerHTML = `<path d="${playPath}"/>`;
+                    playIcon.style.marginLeft = "4px";
+                    statusIndicator.style.display = "none";
+                }
+            }, 200);
         });
 
         // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen features
