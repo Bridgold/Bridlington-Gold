@@ -175,10 +175,10 @@
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
 
-        <!-- THE UNBLOCKABLE DIRECT ACCOUNT ACCESS STREAM PASS: TARGETS THE CORE MOUNT ROUTE -->
-        <audio id="audioPlayer" src="https://radio.co" crossorigin="anonymous" preload="none"></audio>
+        <!-- RECONFIGURED VIA AN OPEN REVERSE PROXY PIPELINE TO STRIP HARD ORIGIN ROUTE FIREWALLS -->
+        <audio id="audioPlayer" src="https://corsproxy.io" preload="none"></audio>
 
-        <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
+        <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON) -->
         <div class="controls">
             <button class="btn-play" id="playBtn" aria-label="Play">
                 <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -201,19 +201,18 @@
         const playPath = "M8 5v14l11-7z";
         const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
 
-        // FUNCTION TO FETCH LIVE SONG TITLES DIRECTLY BYPASSING FIREWALL LOGS
+        // Fetch live track status names through an open stream proxy format configuration
         function updateTrackMetadata() {
-            fetch('https://radio.co')
+            fetch('https://corsproxy.io')
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.current_track && data.current_track.title) {
                         trackInfo.innerText = data.current_track.title;
                     }
                 })
-                .catch(err => console.log("Metadata block bypassed: ", err));
+                .catch(err => console.log("Metadata proxy tracking active: ", err));
         }
 
-        // Fetch live metadata every 15 seconds automatically
         updateTrackMetadata();
         setInterval(updateTrackMetadata, 15000);
 
@@ -221,25 +220,23 @@
             if (audio.paused) {
                 statusIndicator.style.display = "block";
                 statusIndicator.innerText = "Buffering...";
-                audio.load(); // Flush deep browser network audio buffer layers
+                audio.load(); // Flush background data caches
                 
                 audio.play()
                     .then(() => {
-                        // Change icon to pause square lines
                         playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                        playIcon.style.marginLeft = "0px"; // Reset square pause alignments
+                        playIcon.style.marginLeft = "0px"; // Reset alignment bounds
                         statusIndicator.innerText = "Live";
                         updateTrackMetadata();
                     })
                     .catch(err => {
-                        console.error("Audio pipeline initialization dropped:", err);
+                        console.error("Audio proxy pipeline dropped:", err);
                         statusIndicator.innerText = "Error Loading Stream";
                     });
             } else {
                 audio.pause();
-                // Return icon back to the centered play triangle
                 playIcon.innerHTML = `<path d="${playPath}"/>`;
-                playIcon.style.marginLeft = "4px"; // Center triangle spacing
+                playIcon.style.marginLeft = "4px"; // Perfectly center the play triangle
                 statusIndicator.style.display = "none";
             }
         });
