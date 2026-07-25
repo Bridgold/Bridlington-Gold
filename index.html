@@ -158,17 +158,6 @@
             font-weight: bold;
             display: none;
         }
-
-        /* COMPLETELY HIDDEN CONTAINER TO HOUISE THE WHITELISTED TUNNEL ENGINE */
-        .hidden-tunnel-box {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            overflow: hidden;
-            top: -1000px;
-            left: -1000px;
-        }
     </style>
 </head>
 <body>
@@ -186,7 +175,7 @@
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
 
-        <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON) -->
+        <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
         <div class="controls">
             <button class="btn-play" id="playBtn" aria-label="Play">
                 <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -199,44 +188,41 @@
         </div>
     </div>
 
-    <!-- FIREWALL REMOVAL BYPASS: INJECTING THE UNBLOCKABLE TUNNEL INSIDE THE INVISIBLE WRAPPER CONTAINER -->
-    <div class="hidden-tunnel-box">
-        <iframe id="secureStreamFrame" src="https://radio.co" allow="autoplay"></iframe>
-    </div>
-
     <script>
         const playBtn = document.getElementById('playBtn');
         const playIcon = document.getElementById('playIcon');
         const statusIndicator = document.getElementById('statusIndicator');
-        const streamFrame = document.getElementById('secureStreamFrame');
 
         const playPath = "M8 5v14l11-7z";
         const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
-        
-        let appIsStreaming = false;
+
+        // Create a direct native browser audio object instance using your unblockable Radio.co stream proxy endpoint
+        let radioAudioStream = new Audio("https://radio.co");
+        radioAudioStream.crossOrigin = "anonymous";
 
         playBtn.addEventListener('click', () => {
-            if (!appIsStreaming) {
+            if (radioAudioStream.paused) {
                 statusIndicator.style.display = "block";
                 statusIndicator.innerText = "Buffering...";
                 
-                // Force-reload the hidden authorized frame to grab the exact live feed entry point
-                streamFrame.src = "https://radio.co&autoplay=true";
+                // Force reload the target path parameter to clear lag buffer layers
+                radioAudioStream.load();
                 
-                setTimeout(() => {
-                    playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                    playIcon.style.marginLeft = "0px";
-                    statusIndicator.innerText = "Live";
-                    appIsStreaming = true;
-                }, 1200); // Tiny pause to allow the background stream connection to settle
-                
+                radioAudioStream.play()
+                    .then(() => {
+                        playIcon.innerHTML = `<path d="${pausePath}"/>`;
+                        playIcon.style.marginLeft = "0px"; // Centers pause parallel lines perfectly
+                        statusIndicator.innerText = "Live";
+                    })
+                    .catch(err => {
+                        console.error("Audio core pipeline failed to engage:", err);
+                        statusIndicator.innerText = "Error Loading Stream";
+                    });
             } else {
-                // Shut down playback safely by unloading the hidden frame target source
-                streamFrame.src = "about:blank";
+                radioAudioStream.pause();
                 playIcon.innerHTML = `<path d="${playPath}"/>`;
-                playIcon.style.marginLeft = "4px";
+                playIcon.style.marginLeft = "4px"; // Centers play triangle visually
                 statusIndicator.style.display = "none";
-                appIsStreaming = false;
             }
         });
 
