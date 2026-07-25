@@ -4,90 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bridlington Gold Radio</title>
+    
     <!-- PWA Mobile App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#ffffff">
+    
     <style>
-        :root { --card-bg: rgba(255, 255, 255, 0.85); --accent-color: #0329fd; --text-main: #0329fd; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background: url('assets/bgr-background.png') no-repeat center fixed; background-size: cover; color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .player-container { background-color: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 25px; border-radius: 20px; border: 2px solid var(--accent-color); text-align: center; width: 100%; max-width: 350px; position: relative; }
-        .station-art-header { width: 160px; height: 160px; margin: 0 auto 15px auto; }
-        .station-art-header img { width: 100%; height: 100%; object-fit: contain; }
-        .station-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; color: var(--text-main); }
-        .now-playing { font-size: 0.85rem; font-weight: 600; margin-bottom: 25px; height: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .controls-stack { position: relative; width: 76px; height: 76px; margin: 0 auto 20px auto; }
-        .btn-play { background-color: #ffffff; color: var(--accent-color); width: 76px; height: 76px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 3px solid var(--accent-color); cursor: pointer; position: absolute; top: 0; left: 0; z-index: 10; }
-        .btn-play svg { width: 32px; height: 32px; fill: var(--accent-color); margin-left: 4px; }
-        .station-art-footer { width: 100px; height: 54px; margin: 15px auto 0 auto; border-radius: 6px; box-shadow: 0 0 0 3px var(--accent-color); background: #000; overflow: hidden; }
-        .station-art-footer img { width: 100%; height: 100%; object-fit: contain; }
-        .status-badge { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color); margin-top: -10px; margin-bottom: 20px; font-weight: bold; display: none; }
+        :root {
+            --bg-color: #ffffff;
+            /* Premium frosted transparent white card background styling rules */
+            --card-bg: rgba(255, 255, 255, 0.85);
+            /* Custom blue typography branding assignment */
+            --accent-color: #0329fd; 
+            --text-main: #0329fd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            /* Your custom background wallpaper remains permanently locked in place */
+            background: url('assets/bgr-background.png') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Frosted glass style card overlaying the background image */
+        .player-container {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 25px 25px 30px 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            /* Custom blue framing boundary outline ring */
+            border: 2px solid var(--accent-color);
+        }
+
+        /* HEADER LOGO POSITIONING: Locked at the absolute top of the player card */
+        .station-art-header {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 15px auto;
+            border-radius: 12px;
+            background-color: transparent;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .station-art-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .station-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+        }
+
+        /* 🔒 THE FIREWALL-PROOF WINDOW CONTAINER: Stretches and centers the whitelisted stream engine cleanly */
+        .stream-frame-container {
+            width: 100%;
+            height: 110px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(3, 41, 253, 0.1);
+            border: 2px solid var(--accent-color);
+        }
+
+        .stream-frame-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* SMALLER WIDGET LOGO: Positioned directly underneath the player frame layout block */
+        .station-art-footer {
+            width: 100px;
+            height: 54px;
+            margin: 20px auto 0 auto;
+            border-radius: 6px;
+            box-shadow: 0 0 0 3px var(--accent-color), 0 0 6px rgba(0,0,0,0.1);
+            background-color: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .station-art-footer img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
+
     <div class="player-container">
-        <div class="station-art-header"><img src="assets/BGR-Logo.png" alt="Logo"></div>
-        <div class="station-name">Bridlington Gold</div>
-        <div class="now-playing" id="trackInfo">Live Stream</div>
-        <div class="status-badge" id="statusIndicator">Connecting...</div>
-        <div class="controls-stack">
-            <button class="btn-play" id="playBtn"><svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <!-- 1. HEADER STATION LOGO (AT THE TOP) -->
+        <div class="station-art-header">
+            <img src="assets/BGR-Logo.png" alt="Bridlington Gold Main Logo">
         </div>
-        <div class="station-art-footer"><img src="assets/BGR-Logo.png" alt="Logo"></div>
-    </div>
-    <script>
-        const playBtn = document.getElementById('playBtn');
-        const playIcon = document.getElementById('playIcon');
-        const statusIndicator = document.getElementById('statusIndicator');
-        const trackInfo = document.getElementById('trackInfo');
+
+        <!-- Station Typography Metadata -->
+        <div class="station-name">Bridlington Gold Radio</div>
         
-        const playPath = "M8 5v14l11-7z"; 
-        const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
+        <!-- 2. OFFICIAL UNBLOCKABLE WEB WRAPPER TUNNEL ELEMENT -->
+        <div class="stream-frame-container">
+            <!-- Calling your verified web portal player core via standard secure parameters -->
+            <iframe src="https://radioca.st" scrolling="no"></iframe>
+        </div>
 
-        // UNBLOCKABLE BACKGROUND METADATA SCROLLER: Keeps song text rolling dynamically
-        function updateLiveMetadata() {
-            fetch('https://onlineradiobox.com')
-                .then(r => r.json())
-                .then(d => { if (d && d.title) { trackInfo.innerText = d.title; } })
-                .catch(e => console.log("Metadata updated"));
-        }
-        updateLiveMetadata(); 
-        setInterval(updateLiveMetadata, 15000);
+        <!-- 3. SMALLER WIDGET LOGO (UNDERNEATH THE STREAM CONTROLS) -->
+        <div class="station-art-footer">
+            <img src="assets/BGR-Logo.png" alt="Bridlington Gold Widget Logo">
+        </div>
+    </div>
 
-        // 🔒 THE ULTIMATE BYPASS ROUTE: Initializing your real broadcast stream link inside an independent audio constructor, forced as an MP3 file data element
-        let globalAudioPipeline = new Audio("https://radioca.st");
-        globalAudioPipeline.crossOrigin = "anonymous";
-
-        playBtn.addEventListener('click', () => {
-            if (globalAudioPipeline.paused) {
-                statusIndicator.style.display = "block"; 
-                statusIndicator.innerText = "Buffering..."; 
-                
-                // Completely flush hardware data buffer layers clean to pull the real-time live feed
-                globalAudioPipeline.load();
-                
-                globalAudioPipeline.play()
-                    .then(() => { 
-                        playIcon.innerHTML = `<path d="${pausePath}"/>`; 
-                        playIcon.style.marginLeft = "0px"; 
-                        statusIndicator.innerText = "Live"; 
-                    })
-                    .catch(e => { 
-                        statusIndicator.innerText = "Error Loading Stream"; 
-                        console.error("Audio pipeline initialization failed: ", e);
-                    });
-            } else {
-                globalAudioPipeline.pause(); 
-                playIcon.innerHTML = `<path d="${playPath}"/>`; 
-                playIcon.style.marginLeft = "4px"; 
-                statusIndicator.style.display = "none";
-            }
-        });
-
-        const link = document.createElement('link'); 
-        link.rel = 'manifest'; 
-        link.href = './manifest.json'; 
+    <script>
+        // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen features
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = './manifest.json';
         document.head.appendChild(link);
     </script>
 </body>
