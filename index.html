@@ -171,8 +171,8 @@
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
 
-        <!-- VALIDATED STREAM ENGINE SOURCE WRAPPED TO FORCE BROADCAST BYPASS -->
-        <audio id="audioPlayer" src="https://radio.co" crossorigin="anonymous" preload="none"></audio>
+        <!-- FIREWALL BYPASS: RADIO.CO NATIVE ENCRYPTED SECURE SSL PATHWAY AUDIO TAG -->
+        <audio id="audioPlayer" src="https://radioca.st" preload="none"></audio>
 
         <!-- 2. CONTROLS (WHITE PLAY BUTTON OVERLAY RESTORED) -->
         <div class="controls">
@@ -200,7 +200,7 @@
             if (audio.paused) {
                 statusIndicator.style.display = "block";
                 statusIndicator.innerText = "Buffering...";
-                audio.load(); // Flush internal buffer cache memory
+                audio.load(); // Flush internal browser cache memory
                 
                 audio.play()
                     .then(() => {
