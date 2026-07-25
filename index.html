@@ -27,7 +27,6 @@
         }
 
         body {
-            /* Using your custom background image */
             background: url('assets/bgr-background.png') no-repeat center center fixed;
             background-size: cover;
             color: var(--text-main);
@@ -38,7 +37,6 @@
             padding: 20px;
         }
 
-        /* Frosted glass style card overlaying the background image */
         .player-container {
             background-color: var(--card-bg);
             backdrop-filter: blur(10px);
@@ -52,7 +50,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Using your BGR Logo asset inside the player UI */
         .station-art {
             width: 200px;
             height: 200px;
@@ -178,7 +175,6 @@
 <body>
 
     <div class="player-container">
-        <!-- Displaying your BGR Logo file inside the player container -->
         <div class="station-art" id="art">
             <img src="assets/BGR-Logo.png" alt="Bridlington Gold Logo">
         </div>
@@ -186,24 +182,21 @@
         <div class="station-name" id="stationTitle">Bridlington Gold</div>
         <div class="now-playing" id="trackInfo">Live Stream</div>
 
-        <!-- Hidden Audio Element - UPDATED WITH SECURE HTTPS PROXY SOURCE -->
-        <audio id="audioPlayer" src="https://radioca.st" preload="none"></audio>
+        <!-- HIDDEN AUDIO FIX: ADDED CORS ANONYMOUS PASS AND CORRECTED RADIO.CO WEB STREAM LINK -->
+        <audio id="audioPlayer" src="https://radio.co" crossorigin="anonymous" preload="none"></audio>
 
-        <!-- Controls -->
         <div class="controls">
             <button class="btn btn-play" id="playBtn" aria-label="Play">
                 <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
         </div>
 
-        <!-- Volume Layout -->
         <div class="volume-container">
             <span style="color: var(--text-muted); font-size: 14px;">🔈</span>
             <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8">
             <span style="color: var(--text-muted); font-size: 14px;">🔊</span>
         </div>
 
-        <!-- Status Indicator -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
     </div>
 
@@ -251,13 +244,10 @@
             statusIndicator.innerText = "Live";
         });
 
-        // Dynamic Manifest Injector
         const link = document.createElement('link');
         link.rel = 'manifest';
         link.href = './manifest.json';
         document.head.appendChild(link);
-
-        
     </script>
 </body>
 </html>
