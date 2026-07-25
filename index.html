@@ -76,63 +76,34 @@
         .station-name {
             font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 20px;
             color: var(--text-main);
             letter-spacing: 0.5px;
         }
 
-        .now-playing {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 25px;
-            height: 20px;
+        /* EMBED WRAPPER: Formats and centers the native unblockable stream script cleanly */
+        .embed-wrapper {
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Customizes the look of the embedded player frame to look premium inside the blue card */
+        .embed-wrapper .radioco-player {
+            border: 2px solid var(--accent-color) !important;
+            border-radius: 50px !important;
+            box-shadow: 0 4px 15px rgba(3, 41, 253, 0.15) !important;
+            background: #ffffff !important;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        /* BLUE OUTLINE CIRCLE: Crisp white background with blue ring */
-        .btn-play {
-            background-color: #ffffff;
-            color: var(--accent-color);
-            width: 76px;
-            height: 76px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(3, 41, 253, 0.2);
-            border: 3px solid var(--accent-color);
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .btn-play:hover {
-            transform: scale(1.06);
-            box-shadow: 0 6px 20px rgba(3, 41, 253, 0.3);
-        }
-
-        /* BLUE TRIANGLE PLAY ICON: High visibility shape markers */
-        .btn-play svg {
-            width: 32px;
-            height: 32px;
-            fill: var(--accent-color);
-            margin-left: 4px; /* Centers the moving triangle visually */
         }
 
         /* SMALLER WIDGET LOGO: Positioned under the controls block */
         .station-art-footer {
             width: 100px;
             height: 54px;
-            margin: 15px auto 0 auto;
+            margin: 20px auto 0 auto;
             border-radius: 6px;
             box-shadow: 0 0 0 3px var(--accent-color), 0 0 6px rgba(0,0,0,0.1);
             background-color: #000;
@@ -147,17 +118,6 @@
             height: 100%;
             object-fit: contain;
         }
-
-        .status-badge {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-color);
-            margin-top: -15px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -169,20 +129,11 @@
         </div>
 
         <!-- Station Typography Metadata -->
-        <div class="station-name">Bridlington Gold</div>
-        <div class="now-playing" id="trackInfo">Live Stream</div>
+        <div class="station-name">Bridlington Gold Radio</div>
         
-        <!-- Live Play Status Badge -->
-        <div class="status-badge" id="statusIndicator">Connecting...</div>
-
-        <!-- RESOLVED STREAM CONTEXT PATH: ENFORCING THE HARD SHOUTCAST ICECAST MOUNT TERMINATION RULE FOR AUDIO ELEMENTS -->
-        <audio id="audioPlayer" src="https://radioca.st" crossorigin="anonymous" preload="none"></audio>
-
-        <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
-        <div class="controls">
-            <button class="btn-play" id="playBtn" aria-label="Play">
-                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
+        <!-- 2. CONTROLS: OFFICIAL UNBLOCKABLE INTEGRATION PLUGIN ENGINE -->
+        <div class="embed-wrapper">
+            <script src="https://radio.co"></script>
         </div>
 
         <!-- 3. SMALLER WIDGET LOGO (UNDERNEATH CONTROLS) -->
@@ -192,48 +143,6 @@
     </div>
 
     <script>
-        const audio = document.getElementById('audioPlayer');
-        const playBtn = document.getElementById('playBtn');
-        const playIcon = document.getElementById('playIcon');
-        const statusIndicator = document.getElementById('statusIndicator');
-
-        const playPath = "M8 5v14l11-7z";
-        const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
-
-        playBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                statusIndicator.style.display = "block";
-                statusIndicator.innerText = "Buffering...";
-                audio.load(); // Flush background stream cache memory data points
-                
-                audio.play()
-                    .then(() => {
-                        // Change icon to pause square lines
-                        playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                        playIcon.style.marginLeft = "0px"; // Reset square pause alignments
-                        statusIndicator.innerText = "Live";
-                    })
-                    .catch(err => {
-                        console.error("Audio pipeline connection failed:", err);
-                        statusIndicator.innerText = "Error Loading Stream";
-                    });
-            } else {
-                audio.pause();
-                // Return icon back to the centered play triangle
-                playIcon.innerHTML = `<path d="${playPath}"/>`;
-                playIcon.style.marginLeft = "4px"; // Center triangle spacing
-                statusIndicator.style.display = "none";
-            }
-        });
-
-        audio.addEventListener('stalled', () => {
-            if (!audio.paused) statusIndicator.innerText = "Reconnecting...";
-        });
-
-        audio.addEventListener('playing', () => {
-            statusIndicator.innerText = "Live";
-        });
-
         // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen capabilities
         const link = document.createElement('link');
         link.rel = 'manifest';
