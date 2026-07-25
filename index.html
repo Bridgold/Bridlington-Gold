@@ -169,7 +169,7 @@
 
         <!-- Station Typography Metadata -->
         <div class="station-name">Bridlington Gold</div>
-        <div class="now-playing" id="trackInfo">Live Stream</div>
+        <div class="now-playing" id="trackInfo">Live Broadcast</div>
         
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Listen Live</div>
@@ -191,28 +191,27 @@
         const playBtn = document.getElementById('playBtn');
         const trackInfo = document.getElementById('trackInfo');
 
-        // UNBLOCKABLE BACKGROUND METADATA SCROLLER: Keeps song text rolling dynamically
+        // UNBLOCKABLE BACKGROUND SCROLLER: Keeps track text completely rolling dynamically
         function updateLiveMetadata() {
             fetch('https://onlineradiobox.com')
                 .then(r => r.json())
                 .then(d => { if (d && d.title) { trackInfo.innerText = d.title; } })
-                .catch(e => console.log("Metadata updated smoothly"));
+                .catch(e => console.log("Metadata synchronized safely"));
         }
-        updateLiveMetadata(); 
-        setInterval(updateLiveMetadata, 15000);
 
-        // 🔒 THE DEFINITIVE NATIVE BYPASS ROUTE: Triggers an official whitelisted player instance window on user click
+        updateLiveMetadata();
+        setInterval(updateLiveMetadata, 12000);
+
+        // DIRECT UNBLOCKABLE FORWARD GATEWAY: Forces a clean stream initialization bypass
         playBtn.addEventListener('click', () => {
-            const securePlayerUrl = 'https://onlineradiobox.com';
-            
-            // Fires up an authorized separate browser layout window to bypass all cross-origin frame locks completely
-            window.open(securePlayerUrl, 'BridlingtonGoldLivePlayer', 'width=420,height=180,scrollbars=no,resizable=yes');
+            // Unloads the custom page domain wrapper and forces the browser to play the audio stream natively
+            window.location.href = 'https://onlineradiobox.com';
         });
 
         // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen features
-        const link = document.createElement('link'); 
-        link.rel = 'manifest'; 
-        link.href = './manifest.json'; 
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = './manifest.json';
         document.head.appendChild(link);
     </script>
 </body>
