@@ -100,16 +100,17 @@
         <!-- FIREWALL BYPASSING ENGINE LAYER: INCORPORATING YOUR WORKING WEBSITE WIDGET -->
         <div class="orbP" id="orb_player_26bbf4ab2ff58dc4" vlm="0.8">
             <div class="orbPhc">
-                <a class="orbPh" href="https://onlineradiobox.com/uk/" target="_blank" style="display:none!important;">
-                    <img src="https://onlineradiobox.com" alt="Online Radio">
+                <a class="orbPh" href="https://onlineradiobox.com" target="_blank" style="display:none!important;">
+                    <img src="https://ecdn.onlineradiobox.com/img/wl.svg" alt="Online Radio">
                 </a>
 
-                <audio id="orb_player_26bbf4ab2ff58dc4_p" crossorigin="true" style="width:1px;height:1px;overflow:hidden;position:absolute;"></audio>
+                <!-- TARGET MOUNT AUDITED FIX: ROUTING YOUR AUDIO STREAM DIRECTLY INSIDE THE WIDGET WRAPPER MAPPED HOOK -->
+                <audio id="orb_player_26bbf4ab2ff58dc4_p" src="https://radioca.st" crossorigin="anonymous" style="width:1px;height:1px;overflow:hidden;position:absolute;"></audio>
 
                 <!-- Audio control hook -->
-                <button class="orbPp" title="Listen live" country="uk" alias="bridlingtongold" stream="1" autoplay="autoplay"></button>
+                <button class="orbPp" id="widgetPlayBtn" title="Listen live" country="uk" alias="bridlingtongold" stream="1"></button>
 
-                <a class="orbPt" href="https://onlineradiobox.com/uk/bridlingtongold/" target="_blank">
+                <a class="orbPt" href="https://onlineradiobox.combridlingtongold/" target="_blank">
                     <!-- Pointing logo asset to local path for PWA asset requirements -->
                     <img class="orbPti" src="assets/BGR-Logo.png" alt="Bridlington Gold">
                     <span class="orbPtn">Bridlington Gold</span>
@@ -134,6 +135,17 @@
         var s = document.createElement('script');
         s.src = "https://onlineradiobox.com";
         document.body.appendChild(s);
+
+        // Fallback Core Player override to force execution if widget engine blocks cross-origin traffic
+        document.getElementById('widgetPlayBtn').addEventListener('click', function() {
+            var fallbackAudio = document.getElementById('orb_player_26bbf4ab2ff58dc4_p');
+            if (fallbackAudio.paused) {
+                fallbackAudio.load();
+                fallbackAudio.play().catch(function(e){ console.log("Stream initialization protected:", e); });
+            } else {
+                fallbackAudio.pause();
+            }
+        });
 
         // Dynamic Manifest Injector for instant smartphone app installations
         const link = document.createElement('link');
