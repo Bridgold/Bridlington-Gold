@@ -14,7 +14,9 @@
         :root {
             --bg-color: #121212;
             --card-bg: rgba(30, 30, 30, 0.85);
+            --accent-color: #f39c12; /* Premium Gold Accent */
             --text-main: #ffffff;
+            --text-muted: #b3b3b3;
         }
 
         * {
@@ -36,7 +38,7 @@
             padding: 20px;
         }
 
-        /* Glassmorphism styling around your working website widget */
+        /* Frosted glass style card overlaying the background image */
         .player-container {
             background-color: var(--card-bg);
             backdrop-filter: blur(10px);
@@ -52,8 +54,8 @@
 
         /* Using your BGR Logo asset inside the player UI */
         .station-art {
-            width: 160px;
-            height: 160px;
+            width: 200px;
+            height: 200px;
             margin: 0 auto 24px auto;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
@@ -70,72 +72,136 @@
             object-fit: contain;
         }
 
-        /* Core OnlineRadioBox widget structural dependencies */
-        .orbP {position:relative;box-sizing:border-box;overflow:hidden;font-weight:normal;border:1px solid transparent;user-select:none;text-align:left}
-        .orbP br, .orbP>br {display:none!important;}
-        .orbP p, .orbP>p {margin:0!important;padding:0!important;line-height:normal!important;font-size:inherit!important}
-        .orbPh {display:none!important;} /* Hide branding icon */
-        .orbPt {text-decoration:none!important;margin: 0 auto!important;}
-        .orbPti {display:block;margin:0 auto!important;vertical-align:top!important;height:54px!important;width:100px!important;border:none!important;border-radius:6px!important;box-shadow:0 0 0 3px #003399, 0 0 6px rgba(0,0,0,0.2)!important;}
-        .orbPtn {display:none!important;}
-        .orbPtt {display:none!important;}
-        
-        /* Restyling buttons to look premium with your yellow and gold branding shapes */
-        .orbPp, .orbPs {display:block!important;margin:0 auto 20px auto!important;padding:0!important;height:64px!important;width:64px!important;line-height:64px!important;border-radius:50%!important;border:none!important;text-align:center!important;cursor:pointer;background:#ffffff!important;box-shadow:0 0 10px rgba(0,0,0,0.25)!important;}
-        .orbPp::before, .orbPs::before {display:inline-block;vertical-align:middle;content:'';width:0;height:0;border-style:solid}
-        .orbPp::before {border-color:transparent transparent transparent #fecb00!important;border-width:18px 0 18px 30px!important;margin-left:6px;}
-        .orbPs::before {border-color:#fecb00!important;border-width:14px!important;}
-        .orbPhc {position:relative!important;box-sizing:border-box!important;padding:10px!important;overflow:hidden;display:block!important;text-align:center!important;}
+        .station-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .now-playing {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-play {
+            background-color: var(--accent-color);
+            color: #fff;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .btn-play:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        .btn-play svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-color);
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
     <div class="player-container">
-        <!-- Displaying your BGR Logo file inside your PWA interface shell -->
-        <div class="station-art">
+        <!-- Displaying your BGR Logo file -->
+        <div class="station-art" id="art">
             <img src="assets/BGR-Logo.png" alt="Bridlington Gold Logo">
         </div>
+        
+        <div class="station-name" id="stationTitle">Bridlington Gold</div>
+        
+        <!-- LIVE METADATA CONTAINER: AUTOMATICALLY DRIVEN BY THE RADIO.CO SCRIPT GENERATOR -->
+        <div class="now-playing"><span class="custom-shoutcast-track">Live Stream</span></div>
 
-        <!-- GUARANTEED SYSTEM WRAPPER: INCORPORATING YOUR WORKING WEBSITE WIDGET ASSETS -->
-        <div class="orbP" id="orb_player_26bbf4ab2ff58dc4" vlm="0.8">
-            <div class="orbPhc">
-                <a class="orbPh" href="https://onlineradiobox.com" target="_blank">
-                    <img src="https://onlineradiobox.com" alt="Online Radio">
-                </a>
-
-                <!-- Left blank as it is populated dynamically by the verified script source -->
-                <audio id="orb_player_26bbf4ab2ff58dc4_p" crossorigin="true" style="width:1px;height:1px;overflow:hidden;position:absolute;"></audio>
-
-                <!-- Audio control hook -->
-                <button class="orbPp" title="Listen live" country="uk" alias="bridlingtongold" stream="1" autoplay="autoplay"></button>
-
-                <a class="orbPt" href="https://onlineradiobox.combridlingtongold/" target="_blank">
-                    <!-- Pointing logo asset to local path for PWA asset requirements -->
-                    <img class="orbPti" src="assets/BGR-Logo.png" alt="Bridlington Gold">
-                    <span class="orbPtn">Bridlington Gold</span>
-                </a>
-
-                <span class="orbPtt"></span>
-            </div>
+        <!-- Controls -->
+        <div class="controls">
+            <!-- Bound directly to Radio.co's native JS click-handler class rule -->
+            <button class="btn btn-play radioco-playButton" id="playBtn" aria-label="Play">
+                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
         </div>
 
+        <!-- Status Indicator -->
+        <div class="status-badge" id="statusIndicator">Connecting...</div>
     </div>
 
-    <!-- Active Script Initialization Engines -->
-    <script>
-        // OnlineRadioBox Background Initialization Pipeline
-        var orbp_w = orbp_w || { lang: "en-us" };
-        orbp_w.cmd = orbp_w.cmd || [];
-        orbp_w.apiUrl = "https://onlineradiobox.com";
-        orbp_w.cmd.push(function() {
-            orbp_w.init("orb_player_26bbf4ab2ff58dc4");
-        });
-        
-        var s = document.createElement('script');
-        s.src = "https://onlineradiobox.com";
-        document.body.appendChild(s);
+    <!-- NATIVE RADIO.CO VERIFIED WEB PLAYER AUDIO WRAPPER DEPENDENCY SCRIPT -->
+    <script src="https://radio.co"></script>
 
-        // Dynamic Manifest Injector for instant smartphone app installations
+    <script>
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const statusIndicator = document.getElementById('statusIndicator');
+
+        const playPath = "M8 5v14l11-7z";
+        const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
+
+        // Initialize your authenticated Radio.co API options matching your account hash ID (s837138072)
+        const streamer = new RadioCoPlayer('.player-container', {
+            station: 's837138072',
+            autoplay: false
+        });
+
+        // Synchronize our gold layout SVG buttons with Radio.co's background media streaming playback
+        playBtn.addEventListener('click', () => {
+            // Give it half a second to calculate the playback state update change toggle
+            setTimeout(() => {
+                const isPlaying = playBtn.classList.contains('radioco-playing');
+                if (isPlaying) {
+                    playIcon.innerHTML = `<path d="${pausePath}"/>`;
+                    statusIndicator.style.display = "block";
+                    statusIndicator.innerText = "Live";
+                } else {
+                    playIcon.innerHTML = `<path d="${playPath}"/>`;
+                    statusIndicator.style.display = "none";
+                }
+            }, 300);
+        });
+
+        // Dynamic Manifest Injector for mobile installation compatibility
         const link = document.createElement('link');
         link.rel = 'manifest';
         link.href = './manifest.json';
