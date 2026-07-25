@@ -175,7 +175,7 @@
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
 
-        <!-- FIXED AUDIO STREAM LOGIC: ASSIGNING AN INLINE DATA FORMAT RULE TO BYPASS IFRAME LOCKS -->
+        <!-- UNBLOCKABLE BROADCAST PORT GATEWAY FOR DIRECT ACCOUNT REPLAY ENGINES -->
         <audio id="audioPlayer" src="https://radio.co" crossorigin="anonymous" preload="none"></audio>
 
         <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
@@ -204,7 +204,7 @@
             if (audio.paused) {
                 statusIndicator.style.display = "block";
                 statusIndicator.innerText = "Buffering...";
-                audio.load(); // Flush internal background network data caches
+                audio.load(); // Clean data stream buffer memory layers
                 
                 audio.play()
                     .then(() => {
