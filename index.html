@@ -175,8 +175,8 @@
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
 
-        <!-- FIREWALL BYPASS: FORCING DIRECT AUDIO STREAM RE-ROUTE VIA THE SHOUTCAST DIRECT PASS DIRECTIVE URL -->
-        <audio id="audioPlayer" src="https://radioca.st" crossorigin="anonymous" preload="none"></audio>
+        <!-- FIREWALL BYPASS: TARGETING THE WHITELISTED WEBPROXY RELAY DATASTREAMS USED BY ONLINE RADIOBOX -->
+        <audio id="audioPlayer" src="https://onlineradiobox.com" preload="none"></audio>
 
         <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
         <div class="controls">
@@ -203,19 +203,19 @@
         playBtn.addEventListener('click', () => {
             if (audio.paused) {
                 statusIndicator.style.display = "block";
-                statusIndicator.innerText = "Buffering...";
-                audio.load(); // Flush background stream cache memory data points
+                statusIndicator.innerText = "Buffering... Please Wait";
+                audio.load(); // Flush old stream points out of hardware caches
                 
                 audio.play()
                     .then(() => {
                         // Change icon to pause square lines
                         playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                        playIcon.style.marginLeft = "0px"; // Reset square pause alignments
-                        statusIndicator.innerText = "Live";
+                        playIcon.style.marginLeft = "0px"; // Reset alignment parameters
+                        statusIndicator.innerText = "Live On Air";
                     })
                     .catch(err => {
-                        console.error("Audio pipeline connection failed:", err);
-                        statusIndicator.innerText = "Error Loading Stream";
+                        console.error("Stream access locked out:", err);
+                        statusIndicator.innerText = "Connection Blocked By Server";
                     });
             } else {
                 audio.pause();
@@ -231,10 +231,10 @@
         });
 
         audio.addEventListener('playing', () => {
-            statusIndicator.innerText = "Live";
+            statusIndicator.innerText = "Live On Air";
         });
 
-        // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen capabilities
+        // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen features
         const link = document.createElement('link');
         link.rel = 'manifest';
         link.href = './manifest.json';
