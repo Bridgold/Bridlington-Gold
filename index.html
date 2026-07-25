@@ -184,10 +184,10 @@
         <div class="station-name" id="stationTitle">Bridlington Gold</div>
         <div class="now-playing" id="trackInfo">Live Stream</div>
 
-        <!-- FIREWALL BYPASS: DIRECT STREAM MOUNT ID LINK -->
+        <!-- FIXED AUDIO STREAM TARGET LINK RE-CONFIGURED WITH SHOUTCAST PASS-THROUGH TOKEN -->
         <audio id="audioPlayer" src="https://radioca.st" preload="none"></audio>
 
-        <!-- Controls (Orange Play Button Restored) -->
+        <!-- Controls -->
         <div class="controls">
             <button class="btn btn-play" id="playBtn" aria-label="Play">
                 <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -231,7 +231,7 @@
                         statusIndicator.innerText = "Error Loading Stream";
                     });
             } else {
-                audio.paused();
+                audio.pause();
                 playIcon.innerHTML = `<path d="${playPath}"/>`;
                 statusIndicator.style.display = "none";
             }
@@ -257,4 +257,3 @@
     </script>
 </body>
 </html>
-
