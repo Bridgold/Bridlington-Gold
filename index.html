@@ -10,13 +10,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#ffffff">
     
-    <!-- REQUIRED DRIVERS: JQUERY AND RADIO.CO CORE PLUGIN LAYOUTS -->
-    <script src="https://jquery.com"></script>
-    <script src="https://radio.co"></script>
-    
     <style>
         :root {
+            --bg-color: #ffffff;
+            /* Premium frosted transparent white card background styling rules */
             --card-bg: rgba(255, 255, 255, 0.85);
+            /* Custom blue typography branding assignment */
             --accent-color: #0329fd; 
             --text-main: #0329fd;
         }
@@ -29,6 +28,7 @@
         }
 
         body {
+            /* Your custom background wallpaper remains permanently locked in place */
             background: url('assets/bgr-background.png') no-repeat center center fixed;
             background-size: cover;
             color: var(--text-main);
@@ -39,6 +39,7 @@
             padding: 20px;
         }
 
+        /* Frosted glass style card overlaying the background image */
         .player-container {
             background-color: var(--card-bg);
             backdrop-filter: blur(12px);
@@ -49,10 +50,11 @@
             width: 100%;
             max-width: 350px;
             text-align: center;
+            /* Custom blue framing boundary outline ring */
             border: 2px solid var(--accent-color);
-            position: relative;
         }
 
+        /* HEADER LOGO POSITIONING: Locked at the absolute top of the player card */
         .station-art-header {
             width: 160px;
             height: 160px;
@@ -74,60 +76,34 @@
         .station-name {
             font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 20px;
             color: var(--text-main);
             letter-spacing: 0.5px;
         }
 
-        .now-playing {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 25px;
-            height: 20px;
+        /* EMBED WRAPPER: Centers the native unblockable stream script cleanly */
+        .embed-wrapper {
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Customizes the look of the embedded player frame to look premium inside the blue card */
+        .embed-wrapper .radioco-player {
+            border: 2px solid var(--accent-color) !important;
+            border-radius: 50px !important;
+            box-shadow: 0 4px 15px rgba(3, 41, 253, 0.15) !important;
+            background: #ffffff !important;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .btn-play {
-            background-color: #ffffff;
-            color: var(--accent-color);
-            width: 76px;
-            height: 76px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(3, 41, 253, 0.2);
-            border: 3px solid var(--accent-color);
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .btn-play:hover {
-            transform: scale(1.06);
-            box-shadow: 0 6px 20px rgba(3, 41, 253, 0.3);
-        }
-
-        .btn-play svg {
-            width: 32px;
-            height: 32px;
-            fill: var(--accent-color);
-            margin-left: 4px;
-        }
-
+        /* SMALLER WIDGET LOGO: Positioned under the controls block */
         .station-art-footer {
             width: 100px;
             height: 54px;
-            margin: 15px auto 0 auto;
+            margin: 20px auto 0 auto;
             border-radius: 6px;
             box-shadow: 0 0 0 3px var(--accent-color), 0 0 6px rgba(0,0,0,0.1);
             background-color: #000;
@@ -142,90 +118,32 @@
             height: 100%;
             object-fit: contain;
         }
-
-        .radioco-player-hidden {
-            display: none !important;
-            visibility: hidden !important;
-        }
     </style>
 </head>
 <body>
 
     <div class="player-container">
-        <!-- 1. HEADER STATION LOGO -->
+        <!-- 1. HEADER STATION LOGO (AT THE TOP) -->
         <div class="station-art-header">
             <img src="assets/BGR-Logo.png" alt="Bridlington Gold Main Logo">
         </div>
 
-        <div class="station-name">Bridlington Gold</div>
+        <!-- Station Typography Metadata -->
+        <div class="station-name">Bridlington Gold Radio</div>
         
-        <!-- Live track title data updates cleanly via the plugin scroller -->
-        <div class="now-playing"><span class="radioco-nowplaying">Live Stream</span></div>
-
-        <!-- FIREWALL BYPASS CORE ELEMENT -->
-        <div class="radioplayer radioco-player-hidden" 
-             data-src="https://radio.co" 
-             data-autoplay="false" 
-             data-playbutton="false" 
-             data-volumeslider="false" 
-             data-elapsedtime="false" 
-             data-nowplaying="true" 
-             data-showplayer="false" 
-             data-volume="100">
+        <!-- 2. CONTROLS: OFFICIAL UNBLOCKABLE INTEGRATION PLUGIN ENGINE -->
+        <div class="embed-wrapper">
+            <script src="https://radio.co"></script>
         </div>
 
-        <!-- 2. CONTROLS -->
-        <div class="controls">
-            <button class="btn-play radioco-playButton" id="playBtn" aria-label="Play">
-                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-        </div>
-
-        <!-- 3. SMALLER WIDGET LOGO -->
+        <!-- 3. SMALLER WIDGET LOGO (UNDERNEATH CONTROLS) -->
         <div class="station-art-footer">
             <img src="assets/BGR-Logo.png" alt="Bridlington Gold Widget Logo">
         </div>
     </div>
 
     <script>
-        // Start Radio.co's background authorized script framework immediately
-        $('.radioplayer').radiocoPlayer();
-
-        const playBtn = document.getElementById('playBtn');
-        const playIcon = document.getElementById('playIcon');
-
-        const playPath = "M8 5v14l11-7z";
-        const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
-
-        // 🔒 THE DEFINITIVE SPEAKER UNLOCKER: Forces the hardware sound pipe open on tap
-        let audioHardwareHook = null;
-
-        playBtn.addEventListener('click', () => {
-            // Instantiate direct native audio inside the click action block to clear browser blocks
-            if (!audioHardwareHook) {
-                audioHardwareHook = new Audio("https://radio.co");
-                audioHardwareHook.crossOrigin = "anonymous";
-            }
-
-            // Sync your visual vector icons based on library class states
-            setTimeout(() => {
-                const streamIsActive = playBtn.classList.contains('radioco-playing');
-                
-                if (streamIsActive) {
-                    playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                    playIcon.style.marginLeft = "0px";
-                    
-                    // Force kick your device's audio processor out of mute mode
-                    audioHardwareHook.load();
-                    audioHardwareHook.play().catch(e => console.log("Sound pipe active"));
-                } else {
-                    playIcon.innerHTML = `<path d="${playPath}"/>`;
-                    playIcon.style.marginLeft = "4px";
-                    if (audioHardwareHook) audioHardwareHook.pause();
-                }
-            }, 250);
-        });
-
+        // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen capabilities
         const link = document.createElement('link');
         link.rel = 'manifest';
         link.href = './manifest.json';
