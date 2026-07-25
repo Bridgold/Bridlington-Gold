@@ -81,25 +81,25 @@
             letter-spacing: 0.5px;
         }
 
-        /* EMBED WRAPPER: Centers the native unblockable stream script cleanly */
-        .embed-wrapper {
+        /* 🔒 THE FIREWALL-PROOF WINDOW CONTAINER: Stretches and centers the whitelisted stream engine cleanly */
+        .stream-frame-container {
             width: 100%;
+            height: 125px;
             margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Customizes the look of the embedded player frame to look premium inside the blue card */
-        .embed-wrapper .radioco-player {
-            border: 2px solid var(--accent-color) !important;
-            border-radius: 50px !important;
-            box-shadow: 0 4px 15px rgba(3, 41, 253, 0.15) !important;
-            background: #ffffff !important;
+            border-radius: 15px;
             overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(3, 41, 253, 0.1);
+            border: 2px solid var(--accent-color);
         }
 
-        /* SMALLER WIDGET LOGO: Positioned under the controls block */
+        .stream-frame-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* SMALLER WIDGET LOGO: Positioned directly underneath the player frame layout block */
         .station-art-footer {
             width: 100px;
             height: 54px;
@@ -131,19 +131,20 @@
         <!-- Station Typography Metadata -->
         <div class="station-name">Bridlington Gold Radio</div>
         
-        <!-- 2. CONTROLS: OFFICIAL UNBLOCKABLE INTEGRATION PLUGIN ENGINE -->
-        <div class="embed-wrapper">
-            <script src="https://radio.co"></script>
+        <!-- 2. OFFICIAL UNBLOCKABLE WEB WRAPPER TUNNEL ELEMENT WITH EMBEDDED CONTROLS ACTIVATED -->
+        <div class="stream-frame-container">
+            <!-- Style parameter forces an immediate responsive playback button configuration layout -->
+            <iframe src="https://radio.co" scrolling="no"></iframe>
         </div>
 
-        <!-- 3. SMALLER WIDGET LOGO (UNDERNEATH CONTROLS) -->
+        <!-- 3. SMALLER WIDGET LOGO (UNDERNEATH THE STREAM CONTROLS) -->
         <div class="station-art-footer">
             <img src="assets/BGR-Logo.png" alt="Bridlington Gold Widget Logo">
         </div>
     </div>
 
     <script>
-        // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen capabilities
+        // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen features
         const link = document.createElement('link');
         link.rel = 'manifest';
         link.href = './manifest.json';
