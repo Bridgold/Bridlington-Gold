@@ -175,7 +175,7 @@
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
 
-        <!-- THE NATIVE FIREWALL BYPASS: FORCING AN MP3 RAW AUDIO CONSTRUCTOR EXTENSION VALUE -->
+        <!-- THE NATIVE FORMAT FIXED BYPASS: APPENDING THE MP3 DEFINITION SO MOBILE BROWSERS FORCE PLAYBACK ACCESS -->
         <audio id="audioPlayer" src="https://radio.co" crossorigin="anonymous" preload="none"></audio>
 
         <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
@@ -204,13 +204,13 @@
             if (audio.paused) {
                 statusIndicator.style.display = "block";
                 statusIndicator.innerText = "Buffering...";
-                audio.load(); // Flush hardware stream data layers
+                audio.load(); // Completely flushes the older error memory out of the device browser cache
                 
                 audio.play()
                     .then(() => {
-                        // Change icon to pause square lines
+                        // Swap the blue play arrow for the two blue pause bars
                         playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                        playIcon.style.marginLeft = "0px"; // Reset square pause alignments
+                        playIcon.style.marginLeft = "0px"; // Reset alignment bounds
                         statusIndicator.innerText = "Live";
                     })
                     .catch(err => {
@@ -219,9 +219,9 @@
                     });
             } else {
                 audio.pause();
-                // Return icon back to the centered play triangle
+                // Flip the icon back to the blue play triangle arrow
                 playIcon.innerHTML = `<path d="${playPath}"/>`;
-                playIcon.style.marginLeft = "4px"; // Center triangle spacing
+                playIcon.style.marginLeft = "4px"; // Perfectly center the triangle spacing
                 statusIndicator.style.display = "none";
             }
         });
@@ -234,7 +234,7 @@
             statusIndicator.innerText = "Live";
         });
 
-        // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen capabilities
+        // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen features
         const link = document.createElement('link');
         link.rel = 'manifest';
         link.href = './manifest.json';
