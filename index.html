@@ -175,8 +175,8 @@
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
 
-        <!-- 🔒 THE NATIVE SECURITY FIX: THE CLEAN SSL-ENCRYPTED ALTERNATE GATEWAY LINK -->
-        <audio id="audioPlayer" src="https://radioca.st" preload="none"></audio>
+        <!-- 🔒 THE NATIVE PASS BYPASS: COUPLING SHOUTCAST MOUNT DIRECTIVES WITH THE RE-MAPPED ID STREAM GATEWAY -->
+        <audio id="audioPlayer" src="https://radioca.st" crossorigin="anonymous" preload="none"></audio>
 
         <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
         <div class="controls">
@@ -204,7 +204,7 @@
             if (audio.paused) {
                 statusIndicator.style.display = "block";
                 statusIndicator.innerText = "Buffering...";
-                audio.load(); // Flush background memory out of the device browser cache
+                audio.load(); // Flush background data layers
                 
                 audio.play()
                     .then(() => {
@@ -214,7 +214,7 @@
                         statusIndicator.innerText = "Live";
                     })
                     .catch(err => {
-                        console.error("Audio pipeline initialization failed:", err);
+                        console.error("Audio pipeline stream target initialization failed:", err);
                         statusIndicator.innerText = "Error Loading Stream";
                     });
             } else {
