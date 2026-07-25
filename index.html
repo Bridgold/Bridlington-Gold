@@ -175,8 +175,8 @@
         <!-- Live Play Status Badge -->
         <div class="status-badge" id="statusIndicator">Connecting...</div>
 
-        <!-- DIRECT AUDIO ENGINE TUNNEL: PIPING A RAW OPEN DE-RESTRICTED AUDIO MOUNT BYPASSING DOMAIN CHECKS -->
-        <audio id="audioPlayer" src="https://corsproxy.io" preload="none"></audio>
+        <!-- 🔒 THE NATIVE SECURITY FIX: THE CLEAN SSL-ENCRYPTED ALTERNATE GATEWAY LINK -->
+        <audio id="audioPlayer" src="https://radioca.st" preload="none"></audio>
 
         <!-- 2. CONTROLS (WHITE CIRCLE, BLUE OUTLINE, BLUE TRIANGLE PLAY ICON RESTORED) -->
         <div class="controls">
@@ -196,49 +196,32 @@
         const playBtn = document.getElementById('playBtn');
         const playIcon = document.getElementById('playIcon');
         const statusIndicator = document.getElementById('statusIndicator');
-        const trackInfo = document.getElementById('trackInfo');
 
         const playPath = "M8 5v14l11-7z";
         const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
-
-        // DYNAMIC METADATA ENGINE: Pulls live song title parameters natively from the public scraper token
-        function updateLiveMetadata() {
-            fetch('https://corsproxy.io')
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.title) {
-                        trackInfo.innerText = data.title;
-                    }
-                })
-                .catch(err => console.log("Metadata synchronized smoothly"));
-        }
-
-        updateLiveMetadata();
-        setInterval(updateLiveMetadata, 15000);
 
         playBtn.addEventListener('click', () => {
             if (audio.paused) {
                 statusIndicator.style.display = "block";
                 statusIndicator.innerText = "Buffering...";
-                audio.load(); // Flush background data layers
+                audio.load(); // Flush background memory out of the device browser cache
                 
                 audio.play()
                     .then(() => {
-                        // Change icon to pause square lines
+                        // Swap the blue play arrow for the two blue pause bars
                         playIcon.innerHTML = `<path d="${pausePath}"/>`;
                         playIcon.style.marginLeft = "0px"; // Reset alignment bounds
                         statusIndicator.innerText = "Live";
-                        updateLiveMetadata();
                     })
                     .catch(err => {
-                        console.error("Audio pipeline tunnel initialization dropped:", err);
+                        console.error("Audio pipeline initialization failed:", err);
                         statusIndicator.innerText = "Error Loading Stream";
                     });
             } else {
                 audio.pause();
-                // Return icon back to the centered play triangle
+                // Flip the icon back to the blue play triangle arrow
                 playIcon.innerHTML = `<path d="${playPath}"/>`;
-                playIcon.style.marginLeft = "4px"; // Center triangle spacing
+                playIcon.style.marginLeft = "4px"; // Perfectly center the play triangle
                 statusIndicator.style.display = "none";
             }
         });
