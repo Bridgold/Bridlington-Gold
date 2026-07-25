@@ -10,11 +10,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#121212">
     
+    <!-- CORE SCRIPTS: REQUIRED BY RADIO.CO ENGINE PIPELINES TO BIND THE AUDIO STREAM -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://public.radio.co/playerapi/jquery.radiocoplayer.min.js"></script>
+    
     <style>
         :root {
             --bg-color: #121212;
             --card-bg: rgba(30, 30, 30, 0.85);
-            --accent-color: #f39c12; /* Premium Gold Accent */
+            --accent-color: #f39c12; /* Premium Gold/Orange Accent */
             --text-main: #ffffff;
             --text-muted: #b3b3b3;
         }
@@ -43,7 +47,7 @@
             background-color: var(--card-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 30px;
+            padding: 35px 30px;
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.6);
             width: 100%;
@@ -52,12 +56,66 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Using your BGR Logo asset inside the player UI */
+        .station-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .now-playing {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            height: 22px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        /* RESTORED VISUAL LAYOUT: Premium crisp white circle container */
+        .btn-play {
+            background-color: #ffffff;
+            color: var(--accent-color);
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-play:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+
+        /* Sizing and alignment padding for your play triangle */
+        .btn-play svg {
+            width: 32px;
+            height: 32px;
+            fill: currentColor;
+            margin-left: 4px; /* Perfectly centers a moving play arrow triangle visually */
+        }
+
+        /* RESTORED LOGO POSITIONING: Shifted directly below the play controls */
         .station-art {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 24px auto;
-            border-radius: 15px;
+            width: 180px;
+            height: 180px;
+            margin: 10px auto 0 auto;
+            border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             background-color: #000;
             overflow: hidden;
@@ -72,136 +130,90 @@
             object-fit: contain;
         }
 
-        .station-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #fff;
-        }
-
-        .now-playing {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-            height: 20px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .btn {
-            background: none;
-            border: none;
-            color: var(--text-main);
-            cursor: pointer;
-            transition: transform 0.2s, color 0.2s;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-        }
-
-        .btn-play {
-            background-color: var(--accent-color);
-            color: #fff;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .btn-play:hover {
-            transform: scale(1.1);
-            filter: brightness(1.1);
-        }
-
-        .btn-play svg {
-            width: 28px;
-            height: 28px;
-            fill: currentColor;
-        }
-
-        .status-badge {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent-color);
-            margin-top: 15px;
-            font-weight: bold;
-            display: none;
+        /* Keeps the Radio.co fallback tracking layer completely invisible */
+        .radioco-player-hidden {
+            display: none !important;
+            width: 0px;
+            height: 0px;
         }
     </style>
 </head>
 <body>
 
     <div class="player-container">
-        <!-- Displaying your BGR Logo file -->
-        <div class="station-art" id="art">
-            <img src="assets/BGR-Logo.png" alt="Bridlington Gold Logo">
-        </div>
+        <!-- Station Title & Scroller Layout -->
+        <div class="station-name">Bridlington Gold</div>
         
-        <div class="station-name" id="stationTitle">Bridlington Gold</div>
-        
-        <!-- LIVE METADATA CONTAINER: AUTOMATICALLY DRIVEN BY THE RADIO.CO SCRIPT GENERATOR -->
-        <div class="now-playing"><span class="custom-shoutcast-track">Live Stream</span></div>
+        <!-- Live track title slot dynamically driven by Radio.co API engines -->
+        <div class="now-playing"><span class="radioco-nowplaying">Live Stream</span></div>
 
-        <!-- Controls -->
+        <!-- HIDDEN RADIO.CO CONTEXT BLOCK: AUTHORIZED HARD PIPELINE STREAMS TO BYPASS FIREWALLS -->
+        <div class="radioplayer radioco-player-hidden" 
+             data-src="https://radio.co" 
+             data-autoplay="false" 
+             data-playbutton="false" 
+             data-volumeslider="false" 
+             data-elapsedtime="false" 
+             data-nowplaying="true" 
+             data-showplayer="false" 
+             data-volume="100">
+        </div>
+
+        <!-- Controls (White Circle with Gold/Orange Triangle play button restored) -->
         <div class="controls">
-            <!-- Bound directly to Radio.co's native JS click-handler class rule -->
-            <button class="btn btn-play radioco-playButton" id="playBtn" aria-label="Play">
+            <button class="btn-play" id="customPlayBtn" aria-label="Play">
                 <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
         </div>
 
-        <!-- Status Indicator -->
-        <div class="status-badge" id="statusIndicator">Connecting...</div>
+        <!-- Logo repositioned below the play button elements -->
+        <div class="station-art">
+            <img src="assets/BGR-Logo.png" alt="Bridlington Gold Logo">
+        </div>
     </div>
 
-    <!-- NATIVE RADIO.CO VERIFIED WEB PLAYER AUDIO WRAPPER DEPENDENCY SCRIPT -->
-    <script src="https://radio.co"></script>
-
     <script>
-        const playBtn = document.getElementById('playBtn');
+        // Initialize the tracking engine plugin script to run in the background
+        $('.radioplayer').radiocoPlayer();
+
+        const playBtn = document.getElementById('customPlayBtn');
         const playIcon = document.getElementById('playIcon');
-        const statusIndicator = document.getElementById('statusIndicator');
 
         const playPath = "M8 5v14l11-7z";
         const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
 
-        // Initialize your authenticated Radio.co API options matching your account hash ID (s837138072)
-        const streamer = new RadioCoPlayer('.player-container', {
-            station: 's837138072',
-            autoplay: false
-        });
+        // Global variable to monitor our custom stream status
+        let customAudioStream = null;
 
-        // Synchronize our gold layout SVG buttons with Radio.co's background media streaming playback
         playBtn.addEventListener('click', () => {
-            // Give it half a second to calculate the playback state update change toggle
-            setTimeout(() => {
-                const isPlaying = playBtn.classList.contains('radioco-playing');
-                if (isPlaying) {
-                    playIcon.innerHTML = `<path d="${pausePath}"/>`;
-                    statusIndicator.style.display = "block";
-                    statusIndicator.innerText = "Live";
-                } else {
-                    playIcon.innerHTML = `<path d="${playPath}"/>`;
-                    statusIndicator.style.display = "none";
-                }
-            }, 300);
+            // If the audio target doesn't exist yet, build the instance securely
+            if (!customAudioStream) {
+                customAudioStream = new Audio("https://radio.co");
+                customAudioStream.crossOrigin = "anonymous";
+            }
+
+            if (customAudioStream.paused) {
+                // Refresh source cache to pull a 100% live feed point
+                customAudioStream.load();
+                
+                customAudioStream.play()
+                    .then(() => {
+                        // Change icon to pause square lines and center it up perfectly
+                        playIcon.innerHTML = `<path d="${pausePath}"/>`;
+                        playIcon.style.marginLeft = "0px";
+                    })
+                    .catch(err => {
+                        console.error("Audio pipeline initialization dropped:", err);
+                    });
+            } else {
+                customAudioStream.pause();
+                // Return icon back to the centered play triangle
+                playIcon.innerHTML = `<path d="${playPath}"/>`;
+                playIcon.style.marginLeft = "4px";
+            }
         });
 
-        // Dynamic Manifest Injector for mobile installation compatibility
+        // Dynamic Manifest Injector for mobile installation options
         const link = document.createElement('link');
         link.rel = 'manifest';
         link.href = './manifest.json';
