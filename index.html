@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bridlington Gold Radio</title>
-    <!-- PWA Mobile Meta Tags -->
+    <!-- PWA Mobile App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#ffffff">
@@ -18,13 +18,11 @@
         .station-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; color: var(--text-main); }
         .now-playing { font-size: 0.85rem; font-weight: 600; margin-bottom: 25px; height: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .controls-stack { position: relative; width: 76px; height: 76px; margin: 0 auto 20px auto; }
-        .btn-play { background-color: #ffffff; color: var(--accent-color); width: 76px; height: 76px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 3px solid var(--accent-color); cursor: pointer; position: absolute; top: 0; left: 0; z-index: 10; pointer-events: none; }
+        .btn-play { background-color: #ffffff; color: var(--accent-color); width: 76px; height: 76px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 3px solid var(--accent-color); cursor: pointer; position: absolute; top: 0; left: 0; z-index: 10; }
         .btn-play svg { width: 32px; height: 32px; fill: var(--accent-color); margin-left: 4px; }
         .station-art-footer { width: 100px; height: 54px; margin: 15px auto 0 auto; border-radius: 6px; box-shadow: 0 0 0 3px var(--accent-color); background: #000; overflow: hidden; }
         .station-art-footer img { width: 100%; height: 100%; object-fit: contain; }
-        div#orb_player_26bbf4ab2ff58dc4.orbP { position: absolute !important; top: 0 !important; left: 0 !important; width: 76px !important; height: 76px !important; border: none !important; background: transparent !important; z-index: 20 !important; overflow: hidden !important; }
-        #orb_player_26bbf4ab2ff58dc4 .orbPp { width: 76px !important; height: 76px !important; border-radius: 50% !important; opacity: 0.001 !important; cursor: pointer !important; background: black !important; border: none !important; }
-        #orb_player_26bbf4ab2ff58dc4 .orbPhc, #orb_player_26bbf4ab2ff58dc4 .orbPt, #orb_player_26bbf4ab2ff58dc4 .orbPh, #orb_player_26bbf4ab2ff58dc4 .orbPti, #orb_player_26bbf4ab2ff58dc4 .orbPtn, #orb_player_26bbf4ab2ff58dc4 .orbPtt { display: none !important; opacity: 0 !important; width: 0px !important; height: 0px !important; }
+        .status-badge { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-color); margin-top: -10px; margin-bottom: 20px; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
@@ -32,31 +30,47 @@
         <div class="station-art-header"><img src="assets/BGR-Logo.png" alt="Logo"></div>
         <div class="station-name">Bridlington Gold</div>
         <div class="now-playing" id="trackInfo">Live Stream</div>
+        <div class="status-badge" id="statusIndicator">Connecting...</div>
         <div class="controls-stack">
-            <button class="btn-play" id="visualPlayBtn"><svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-            <div class="orbP" id="orb_player_26bbf4ab2ff58dc4" vlm="0.8">
-                <audio id="orb_player_26bbf4ab2ff58dc4_p" crossorigin="true" style="display:none;"></audio>
-                <button class="orbPp" id="actualHiddenBtn" country="uk" alias="bridlingtongold" stream="1"></button>
-            </div>
+            <button class="btn-play" id="playBtn"><svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <!-- 🔒 REVERSE PROXY PIPELINE WRAPPER: ENFORCING STREAM PASSTHROUGH CHANNELS -->
+            <audio id="audioPlayer" src="https://cors.sh" preload="none"></audio>
         </div>
         <div class="station-art-footer"><img src="assets/BGR-Logo.png" alt="Logo"></div>
     </div>
     <script>
-        var orbp_w = orbp_w || { lang: "en-us" }; orbp_w.cmd = orbp_w.cmd || []; orbp_w.apiUrl = "https://onlineradiobox.com";
-        orbp_w.cmd.push(function() { orbp_w.init("orb_player_26bbf4ab2ff58dc4"); });
-        var s = document.createElement('script'); s.src = "https://onlineradiobox.com"; document.body.appendChild(s);
-        const playIcon = document.getElementById('playIcon'); const actualHiddenBtn = document.getElementById('actualHiddenBtn'); const trackInfo = document.getElementById('trackInfo');
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const trackInfo = document.getElementById('trackInfo');
         const playPath = "M8 5v14l11-7z"; const pausePath = "M6 19h4V5H6v14zm8-14v14h4V5h-4z";
+
+        // Separate clean metadata fetch channel using direct unblocked tracking targets
         function updateLiveMetadata() {
-            fetch('https://onlineradiobox.com').then(r => r.json()).then(d => { if (d && d.title) { trackInfo.innerText = d.title; } }).catch(e => console.log("Metadata active"));
+            fetch('https://cors.sh')
+                .then(r => r.json())
+                .then(d => { if (d && d.current_track && d.current_track.title) { trackInfo.innerText = d.current_track.title; } })
+                .catch(e => console.log("Metadata bypassed"));
         }
-        updateLiveMetadata(); setInterval(updateLiveMetadata, 12000);
-        actualHiddenBtn.addEventListener('click', () => {
-            setTimeout(() => {
-                const streamIsActive = actualHiddenBtn.classList.contains('orbPs') || actualHiddenBtn.classList.contains('playing') || !document.getElementById('orb_player_26bbf4ab2ff58dc4_p').paused;
-                if (streamIsActive || actualHiddenBtn.title === "Stop") { playIcon.innerHTML = `<path d="${pausePath}"/>`; playIcon.style.marginLeft = "0px"; updateLiveMetadata(); }
-                else { playIcon.innerHTML = `<path d="${playPath}"/>`; playIcon.style.marginLeft = "4px"; }
-            }, 350);
+        updateLiveMetadata(); setInterval(updateLiveMetadata, 15000);
+
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                statusIndicator.style.display = "block"; statusIndicator.innerText = "Buffering..."; audio.load();
+                audio.play()
+                    .then(() => { 
+                        playIcon.innerHTML = `<path d="${pausePath}"/>`; 
+                        playIcon.style.marginLeft = "0px"; 
+                        statusIndicator.innerText = "Live"; 
+                    })
+                    .catch(e => { 
+                        statusIndicator.innerText = "Error Loading Stream"; 
+                        console.error("Stream initialization dropped: ", e);
+                    });
+            } else {
+                audio.pause(); playIcon.innerHTML = `<path d="${playPath}"/>`; playIcon.style.marginLeft = "4px"; statusIndicator.style.display = "none";
+            }
         });
         const link = document.createElement('link'); link.rel = 'manifest'; link.href = './manifest.json'; document.head.appendChild(link);
     </script>
