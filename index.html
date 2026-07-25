@@ -206,12 +206,10 @@
         updateLiveMetadata();
         setInterval(updateLiveMetadata, 12000);
 
-        // NATIVE POP-UP BYPASS GATEWAY: Opens the unblockable native engine cleanly
+        // DIRECT SERVER PASS GATEWAY: Bypasses website interface screens entirely
         playBtn.addEventListener('click', () => {
-            const playerUrl = 'https://onlineradiobox.com';
-            
-            // Forces standard desktops and mobile app screens to launch the approved stream portal instantly
-            window.open(playerUrl, 'BridlingtonGoldPlayer', 'width=400,height=160,scrollbars=no,resizable=yes');
+            // Points straight to your active server stream mount ID to force continuous playback
+            window.location.href = 'https://onlineradiobox.com';
         });
 
         // Dynamic Manifest Link Injector for Android/iOS PWA Home Screen features
